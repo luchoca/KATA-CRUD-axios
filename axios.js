@@ -117,13 +117,39 @@ d.addEventListener("click", async (e) => {
   if (e.target.matches(".edit")) {
     //con esta validacion detectamos quien inicio el evento y si coinicde con edit
     //va a cambiar los elementos del DOM cuando apretemos edit (titulos, nombre y constelacion del form)
+    //EDIT
     $title.textContent = "Editar Santo";
     $form.nombre.value = e.target.dataset.name;
     $form.constelacion.value = e.target.dataset.constellation; //
     $form.id.value = e.target.dataset.id;
   }
   //FUNCION DELETE
+  //con esta validacion detectamos quien inicio el evento y si coinicde con boton "delete" ejecutamos
   if (e.target.matches(".delete")) {
-    //con esta validacion detectamos quien inicio el evento y si coinicde con delete
+    let isDelete = confirm(
+      `¿Estás seguro de eliminar el id ${e.target.dataset.id}?`
+    );
+
+    if (isDelete) {
+      //Delete - DELETE
+      try {
+        let options = {
+            method: "DELETE",
+            headers: {
+              "Content-type": "application/json; charset=utf-8",
+            },
+          },
+          res = await axios(
+            `http://localhost:5555/santos/${e.target.dataset.id}`,
+            options
+          ),
+          json = await res.data;
+
+        location.reload();
+      } catch (err) {
+        let message = err.statusText || "Ocurrió un error";
+        alert(`Error ${err.status}: ${message}`);
+      }
+    }
   }
 });
