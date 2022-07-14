@@ -8,7 +8,7 @@ const d = document,
 //FUNCION QUE TRAE TODOS LOS SANTOS
 const getAll = async () => {
   try {
-    let res = await axios.get("http://localhost:5555/santos"),
+    let res = await axios.get("http://localhost:5555/superhero"),
       json = await res.data;
 
     console.log(json);
@@ -16,11 +16,12 @@ const getAll = async () => {
     //lo va a colocar en el lugar donde corresponde , ejepmlo el.nombre(nombre del elemento) en el .name
     json.forEach((el) => {
       $template.querySelector(".name").textContent = el.nombre;
-      $template.querySelector(".constellation").textContent = el.constelacion;
-      //AGREGAR UNO NUEVO PARA MEJORAR
+      $template.querySelector(".grupo").textContent = el.grupo;
+      $template.querySelector(".poder").textContent = el.poder; //SE AGREGO UN SELECTOR DEL TH DONDE VA el poder
       $template.querySelector(".edit").dataset.id = el.id;
       $template.querySelector(".edit").dataset.name = el.nombre;
-      $template.querySelector(".edit").dataset.constellation = el.constelacion;
+      $template.querySelector(".edit").dataset.grupo = el.grupo;
+      $template.querySelector(".edit").dataset.poder = el.poder;
       $template.querySelector(".delete").dataset.id = el.id;
 
       let $clone = d.importNode($template, true);
@@ -40,7 +41,6 @@ const getAll = async () => {
 d.addEventListener("DOMContentLoaded", getAll); // cuando se inicia el document se ejecuta getAll
 
 //en el submit/enviar
-
 // POST Y DELETE
 //si el id (nombre="id") viene vacio lo va a poner (post)
 //y si viene con informacion lo elimina (DELETE)
@@ -63,14 +63,17 @@ d.addEventListener("submit", async (e) => {
               //lo pasa a formato json
               //lo que para fetch es "body" aca en axios es "data"
               nombre: e.target.nombre.value, // son las cajas de texto (input) del form
-              constelacion: e.target.constelacion.value, // son las cajas de texto (input) del form
+              grupo: e.target.grupo.value, // son las cajas de texto (input) del form
+              poder: e.target.poder.value,
             }),
           },
-          res = await axios("http://localhost:5555/santos", options),
+          res = await axios("http://localhost:5555/superhero", options),
           json = await res.data; //aca en fetch seria json , pero en axios es data
 
         // AXIOS NO PRECISA MANIPULAR EL ERROR POR QUE LO MANDA DIRECTO AL CATCH
-
+        limpiarInput = () => {
+          $form.reset();
+        };
         location.reload(); // recarga pagina para nueva isercion
       } catch (err) {
         let message = err.statusText || "OH NO!!! ocurrio un error";
@@ -92,11 +95,12 @@ d.addEventListener("submit", async (e) => {
             },
             data: JSON.stringify({
               nombre: e.target.nombre.value,
-              constelacion: e.target.constelacion.value,
+              grupo: e.target.grupo.value,
+              poder: e.target.poder.value,
             }),
           },
           res = await axios(
-            `http://localhost:5555/santos/${e.target.id.value}`,
+            `http://localhost:5555/superhero/${e.target.id.value}`,
             options
           ),
           json = await res.data;
@@ -118,9 +122,10 @@ d.addEventListener("click", async (e) => {
     //con esta validacion detectamos quien inicio el evento y si coinicde con edit
     //va a cambiar los elementos del DOM cuando apretemos edit (titulos, nombre y constelacion del form)
     //EDIT
-    $title.textContent = "Editar Santo";
+    $title.textContent = "Editar Super Heroe";
+    $form.poder.value = e.target.dataset.poder;
     $form.nombre.value = e.target.dataset.name;
-    $form.constelacion.value = e.target.dataset.constellation; //
+    $form.grupo.value = e.target.dataset.grupo;
     $form.id.value = e.target.dataset.id;
   }
   //FUNCION DELETE
@@ -140,7 +145,7 @@ d.addEventListener("click", async (e) => {
             },
           },
           res = await axios(
-            `http://localhost:5555/santos/${e.target.dataset.id}`,
+            `http://localhost:5555/superhero/${e.target.dataset.id}`,
             options
           ),
           json = await res.data;

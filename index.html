@@ -10,28 +10,44 @@
     <h1>CRUD API REST AXIOS</h1>
     <section class="crud">
       <article>
-        <h2 class="crud-title">Agregar Santo</h2>
+        <h2 class="crud-title">Igrese un Super Heroe Favorito</h2>
         <form class="crud-form">
-          <input type="text" name="nombre" placeholder="nombre" required />
-          <br />
           <input
             type="text"
-            name="constelacion"
-            placeholder="constelación"
+            name="nombre"
+            placeholder="Super Heroe"
+            autocomplete="off"
             required
           />
           <br />
-          <input type="submit" value="Enviar" />
+          <input
+            type="text"
+            name="grupo"
+            placeholder="Marvel o DC comics ?"
+            autocomplete="off"
+            required
+          />
+          <br />
+          <input
+            type="text"
+            name="poder"
+            placeholder="Ingrese un Poder"
+            autocomplete="off"
+            required
+          />
+          <br />
+          <input type="submit" value="Guardar" />
           <input type="hidden" name="id" />
         </form>
       </article>
       <article>
-        <h2>Ver Santos</h2>
+        <h2>Ver Super Heroes</h2>
         <table class="crud-table">
           <thead>
             <tr>
               <th>Nombre</th>
-              <th>Constelación</th>
+              <th>Grupo</th>
+              <th>Poder</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -42,7 +58,8 @@
     <template id="crud-template">
       <tr>
         <td class="name"></td>
-        <td class="constellation"></td>
+        <td class="grupo"></td>
+        <td class="poder"></td>
         <td>
           <button class="edit">Editar</button>
           <button class="delete">Eliminar</button>

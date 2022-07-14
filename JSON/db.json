@@ -1,24 +1,22 @@
 {
-  "santos": [
+  "superhero": [
     {
-      "id": 1,
-      "nombre": "Seiya",
-      "constelacion": "Pegaso"
+      "nombre": "SpiderMan",
+      "grupo": "Marvel",
+      "poder": "Aracnido",
+      "id": 1
     },
     {
-      "id": 2,
-      "nombre": "Shiryu",
-      "constelacion": "Dragón"
+      "nombre": "Batman",
+      "grupo": "DC",
+      "poder": "Millonario",
+      "id": 2
     },
     {
-      "id": 4,
-      "nombre": "Shun",
-      "constelacion": "Andrómeda"
-    },
-    {
-      "id": 5,
-      "nombre": "Ikki",
-      "constelacion": "Fénix"
+      "nombre": "Hulk",
+      "grupo": "Marvel",
+      "poder": "Fuerza",
+      "id": 3
     }
   ]
 }
