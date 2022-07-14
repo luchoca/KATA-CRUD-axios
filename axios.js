@@ -5,8 +5,6 @@ const d = document,
   $template = d.getElementById("crud-template").content,
   $fragment = d.createDocumentFragment();
 
-//for each por cada json que venga de la api
-//lo va a colocar en el lugar donde corresponde , ejepmlo el.nombre en el .name
 //FUNCION QUE TRAE TODOS LOS SANTOS
 const getAll = async () => {
   try {
@@ -14,7 +12,8 @@ const getAll = async () => {
       json = await res.data;
 
     console.log(json);
-
+    //for each por cada json que venga de la api
+    //lo va a colocar en el lugar donde corresponde , ejepmlo el.nombre(nombre del elemento) en el .name
     json.forEach((el) => {
       $template.querySelector(".name").textContent = el.nombre;
       $template.querySelector(".constellation").textContent = el.constelacion;
@@ -38,19 +37,21 @@ const getAll = async () => {
   }
 };
 
-d.addEventListener("DOMContentLoaded", getAll);
+d.addEventListener("DOMContentLoaded", getAll); // cuando se inicia el document se ejecuta getAll
 
-//en el submit/ enviar
+//en el submit/enviar
+
 // POST Y DELETE
 //si el id (nombre="id") viene vacio lo va a poner (post)
-//y si viene con informacion lo eliminar (DELETE)
+//y si viene con informacion lo elimina (DELETE)
 d.addEventListener("submit", async (e) => {
   if (e.target === $form) {
-    //esto se ejecuta si el objeto que ejecuta el evento sea el Formulario
+    //esto se ejecuta,si el objeto que ejecuta el evento es el Formulario
     e.preventDefault(); // por eso cancelamos el default para que espere las ordenes de JS
 
+    //POST
     if (!e.target.id.value) {
-      //si dentro del input no hay valor hacemos un POST
+      //si dentro del input "hidden" no hay valor de "id" hacemos un POST o sea insertamos algo
       //Create - POST
       try {
         let options = {
@@ -65,7 +66,7 @@ d.addEventListener("submit", async (e) => {
               constelacion: e.target.constelacion.value, // son las cajas de texto (input) del form
             }),
           },
-          res = await axios("http://localhost:4444/santos", options),
+          res = await axios("http://localhost:5555/santos", options),
           json = await res.data; //aca en fetch seria json , pero en axios es data
 
         // AXIOS NO PRECISA MANIPULAR EL ERROR POR QUE LO MANDA DIRECTO AL CATCH
@@ -80,5 +81,49 @@ d.addEventListener("submit", async (e) => {
         );
       }
     }
+    //PUT/ actualizacion //si en el input hidden hay valor lo actualiza
+    else {
+      //Update - PUT
+      try {
+        let options = {
+            method: "PUT",
+            headers: {
+              "Content-type": "application/json; charset=utf-8",
+            },
+            data: JSON.stringify({
+              nombre: e.target.nombre.value,
+              constelacion: e.target.constelacion.value,
+            }),
+          },
+          res = await axios(
+            `http://localhost:5555/santos/${e.target.id.value}`,
+            options
+          ),
+          json = await res.data;
+
+        location.reload();
+      } catch (err) {
+        let message = err.statusText || "OH NO!!! ocurrio un error";
+        $form.insertAdjacentHTML(
+          "afterend",
+          `<p><b>Error ${err.status}: ${message}</b></p>`
+        );
+      }
+    }
+  }
+});
+
+d.addEventListener("click", async (e) => {
+  if (e.target.matches(".edit")) {
+    //con esta validacion detectamos quien inicio el evento y si coinicde con edit
+    //va a cambiar los elementos del DOM cuando apretemos edit (titulos, nombre y constelacion del form)
+    $title.textContent = "Editar Santo";
+    $form.nombre.value = e.target.dataset.name;
+    $form.constelacion.value = e.target.dataset.constellation; //
+    $form.id.value = e.target.dataset.id;
+  }
+  //FUNCION DELETE
+  if (e.target.matches(".delete")) {
+    //con esta validacion detectamos quien inicio el evento y si coinicde con delete
   }
 });
