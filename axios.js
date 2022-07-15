@@ -30,7 +30,7 @@ const getAll = async () => {
 
     $table.querySelector("tbody").appendChild($fragment);
   } catch (err) {
-    let message = err.statusText || "Ocurrió un error";
+    let message = err.statusText || "OH NO!!! ocurrio un error";
     $table.insertAdjacentHTML(
       "afterend",
       `<p><b>Error ${err.status}: ${message}</b></p>`
@@ -71,9 +71,7 @@ d.addEventListener("submit", async (e) => {
           json = await res.data; //aca en fetch seria json , pero en axios es data
 
         // AXIOS NO PRECISA MANIPULAR EL ERROR POR QUE LO MANDA DIRECTO AL CATCH
-        limpiarInput = () => {
-          $form.reset();
-        };
+
         location.reload(); // recarga pagina para nueva isercion
       } catch (err) {
         let message = err.statusText || "OH NO!!! ocurrio un error";
@@ -158,3 +156,7 @@ d.addEventListener("click", async (e) => {
     }
   }
 });
+//limpiar input despues de que se ingrese un nuevo superhero
+limpiarInput = () => {
+  $form.reset();
+};
